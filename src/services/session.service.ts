@@ -43,6 +43,12 @@ export class SessionService {
 
     return new Promise((resolve, reject) => {
       const client = new Client({
+        puppeteer: {
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+          ]
+        },
         authStrategy: new LocalAuth({clientId: sessionId})
       });
 
