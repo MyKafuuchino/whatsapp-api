@@ -2,6 +2,7 @@ import {Hono} from "hono";
 import {SessionService} from "../services/session.service.ts";
 import type {IResponseSuccess} from "../types/response.ts";
 import {clients} from "../config/client.ts";
+import {WhatsappService} from "../services/whatsapp.service.ts";
 
 const sessionRoute = new Hono().basePath("/sessions");
 
@@ -28,6 +29,16 @@ sessionRoute.delete("/:id", async (c) => {
   return c.json<IResponseSuccess>({
     success: true,
     message: `Session ${sessionId} deleted`,
+  })
+})
+
+sessionRoute.get("/:id/qr", async (c) => {
+  const sessionId = c.req.param("id")
+  const response = await SessionService.getSessionQRStatus(sessionId);
+  return c.json<IResponseSuccess>({
+    success: true,
+    message: `Get qr ${sessionId} successfully`,
+    data: response
   })
 })
 

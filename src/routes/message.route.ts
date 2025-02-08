@@ -34,11 +34,11 @@ messageRoute.post("/sendImageAndMessage", zValidator("form", sendMessageAndImage
   const fileName = `upload_${Date.now()}${path.extname(request.image.name)}`;
   const filePath = path.join("./public/images", fileName);
 
-  fs.writeFile(filePath, buffer, (err) => {
-    if (err) {
-      throw new HTTPException(400, {message: "Error saving image : " + err.message})
-    }
-  });
+  try {
+    await fs.promises.writeFile(filePath, buffer);
+  } catch (err: any) {
+    throw new HTTPException(500, {message: "Error saving image: " + err.message});
+  }
 
   request.imageName = fileName;
 
