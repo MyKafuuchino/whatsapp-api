@@ -7,11 +7,12 @@ import {SessionService} from "./services/session.service.ts";
 async function startServer() {
   await connectDatabase()
   SessionService.loadExistingSessions()
-  log.info('Hono server started');
+  const port = Bun.env.PORT || 3000;
+  log.info(`Hono server started ${port}`);
   Bun.serve(
       {
         fetch: app.fetch,
-        port: 3000
+        port: port,
       }
   )
 }
